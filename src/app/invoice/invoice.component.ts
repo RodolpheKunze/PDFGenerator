@@ -1,11 +1,16 @@
 import { Component } from '@angular/core';
 import { PdfGeneratorService } from '../service/pdf-generator.service';
 import { PDFTemplate } from '../interface/template';
-
+import { getAssetPath } from '../utils/asset-utils';
+import { ImageService } from '../service/image.service';
 
 
 const invoiceTemplate : PDFTemplate = {
   content: [
+    {
+      image: '{{sample}}',  // Direct filename, no placeholders needed
+      width: 150  // Add width to control image size
+    },
     {
       text: '{{company.name}}',
       style: 'header'
@@ -61,10 +66,12 @@ const invoiceTemplate : PDFTemplate = {
   styleUrl: './invoice.component.css'
 })
 export class InvoiceComponent {
-  constructor(private pdfGenerator: PdfGeneratorService) {}
+  constructor(private pdfGenerator: PdfGeneratorService, private imageUtils: ImageService) {}
 
-  generatePdf() {
+  async generatePdf() {
+
     const data = {
+      sample:'01-intro-773.jpg',
       company: {
         name: "ACME Corp",
         address: "123 Business St",
@@ -90,6 +97,11 @@ export class InvoiceComponent {
       ]
     };
 
-    this.pdfGenerator.generatePdf(invoiceTemplate, data).open();
+    try {
+      const pdf = await this.pdfGenerator.generatePdf(invoiceTemplate, data);
+      pdf.open();
+    } catch (error) {
+      console.error('Error generating PDF:', error);
+    }
   }
 }
