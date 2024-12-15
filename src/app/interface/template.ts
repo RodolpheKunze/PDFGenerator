@@ -28,3 +28,14 @@ export interface Content {
   margin?: number[];
   [key: string]: any;
 }
+
+
+export interface DocumentTemplate {
+  content: any[];
+  styles?: Record<string, any>;
+  defaultStyle?: Record<string, any>;
+}
+
+export interface DocumentData {
+  [key: string]: any;
+}

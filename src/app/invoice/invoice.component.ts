@@ -3,6 +3,7 @@ import { PdfGeneratorService } from '../service/pdf-generator.service';
 import { PDFTemplate } from '../interface/template';
 import { getAssetPath } from '../utils/asset-utils';
 import { ImageService } from '../service/image.service';
+import { DocumentComponent } from "../components/document/document.component";
 
 
 const invoiceTemplate : PDFTemplate = {
@@ -61,7 +62,7 @@ const invoiceTemplate : PDFTemplate = {
 @Component({
   selector: 'app-invoice',
   standalone: true,
-  imports: [],
+  imports: [DocumentComponent],
   templateUrl: './invoice.component.html',
   styleUrl: './invoice.component.css'
 })
