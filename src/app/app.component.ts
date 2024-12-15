@@ -3,8 +3,7 @@ import { CommonModule } from '@angular/common';
 import { RouterOutlet } from '@angular/router';
 import { InvoiceComponent } from "./invoice/invoice.component";
 import { DocumentComponent } from './components/document/document.component';
-import { invoiceData } from './data/invoice.data';
-import { invoiceTemplate } from './templates/invoice.template';
+
 
 @Component({
   selector: 'app-root',
@@ -15,6 +14,4 @@ import { invoiceTemplate } from './templates/invoice.template';
 })
 export class AppComponent {
   title = 'PDFGenerator';
-  template = invoiceTemplate;
-  data = invoiceData;
 }
