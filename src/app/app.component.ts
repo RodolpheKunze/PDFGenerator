@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterOutlet } from '@angular/router';
+import { RouterModule, RouterOutlet } from '@angular/router';
 import { InvoiceComponent } from "./invoice/invoice.component";
 import { DocumentComponent } from './components/document/document.component';
 
@@ -8,7 +8,7 @@ import { DocumentComponent } from './components/document/document.component';
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [CommonModule, InvoiceComponent,DocumentComponent],
+  imports: [RouterModule, CommonModule],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'
 })

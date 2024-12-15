@@ -1,0 +1,79 @@
+
+<div class="editor-container">
+    <div class="controls">
+      <div class="data-source-selector">
+        <label for="dataSource">Data Source:</label>
+        <select id="dataSource" [(ngModel)]="dataSource">
+          <option value="file">JSON File</option>
+          <option value="api">API</option>
+        </select>
+      </div>
+      
+      <div *ngIf="dataSource === 'api'" class="api-input">
+        <input 
+          type="text" 
+          [(ngModel)]="apiUrl" 
+          placeholder="Enter API URL"
+        >
+      </div>
+    </div>
+
+    <div *ngIf="error" class="error-message">
+      {{ error }}
+    </div>
+
+    <div class="main-content">
+      <div class="editors">
+        <!-- Template Editor -->
+        <div class="editor-section">
+          <h2>Template</h2>
+          <textarea
+            [(ngModel)]="template"
+            (ngModelChange)="onTemplateChange($event)"
+            placeholder="Enter template JSON..."
+          ></textarea>
+        </div>
+
+        <!-- Data Editor -->
+        <div *ngIf="dataSource === 'file'" class="editor-section">
+          <h2>Data</h2>
+          <textarea
+            [(ngModel)]="data"
+            (ngModelChange)="onDataChange($event)"
+            placeholder="Enter data JSON..."
+          ></textarea>
+        </div>
+      </div>
+
+      <!-- PDF Preview -->
+      <div class="preview-section">
+        <h2>PDF Preview</h2>
+        <div class="preview-container">
+          <iframe 
+            *ngIf="previewUrl"
+            [src]="previewUrl" 
+            frameborder="0"
+            class="pdf-preview"
+          ></iframe>
+          <div *ngIf="!previewUrl" class="preview-placeholder">
+            Enter valid template and data to see PDF preview
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="actions">
+      <button 
+        (click)="updatePreview()"
+        [disabled]="!canPreview"
+      >
+        Refresh Preview
+      </button>
+      <button 
+        (click)="downloadPdf()"
+        [disabled]="!previewUrl"
+      >
+        Download PDF
+      </button>
+    </div>
+  </div>
