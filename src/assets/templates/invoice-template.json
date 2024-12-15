@@ -1,12 +1,11 @@
 {
   "content": [
-
     {
       "image": "{{logoImage}}",
       "width": 150
     },
     {
-      "text":"{{title}}"
+      "text": "{{title}}"
     },
     {
       "text": "{{company.name}}",
@@ -15,17 +14,11 @@
     {
       "columns": [
         {
-          "stack": [
-            "{{company.address}}",
-            "{{company.phone}}"
-          ],
+          "stack": ["{{company.address}}", "{{company.phone}}"],
           "width": "*"
         },
         {
-          "stack": [
-            "Invoice #: {{invoice.number}}",
-            "Date: {{invoice.date}}"
-          ],
+          "stack": ["Invoice #: {{invoice.number}}", "Date: {{invoice.date}}"],
           "width": "*",
           "alignment": "right"
         }
@@ -35,9 +28,7 @@
       "table": {
         "headerRows": 1,
         "widths": ["*", "auto", "auto", "auto"],
-        "body": [
-          ["Description", "Quantity", "Rate", "Amount"]
-        ]
+        "body": [["Description", "Quantity", "Rate", "Amount"]]
       }
     }
   ],

@@ -1,0 +1,12 @@
+{
+  "content": [
+    {
+      "image": "{{monimage}}",
+      "width": 150
+    },
+    {
+      "text": "{{montexte}}",
+      "fontSize": 16
+    }
+  ]
+}
