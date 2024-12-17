@@ -1,78 +1,119 @@
 <div class="editor-container">
-    <div class="controls">
-      <div class="data-source-selector">
-        <label for="dataSource">Data Source:</label>
-        <select id="dataSource" [(ngModel)]="dataSource">
-          <option value="file">JSON File</option>
-          <option value="api">API</option>
-        </select>
-      </div>
-      
-      <div *ngIf="dataSource === 'api'" class="api-input">
-        <input 
-          type="text" 
-          [(ngModel)]="apiUrl" 
-          placeholder="Enter API URL"
-        >
-      </div>
+    <div class="components-toolbar">
+        <div class="component-group">
+            <span class="group-label">Basic:</span>
+            <button *ngFor="let comp of basicComponents" (click)="insertComponent(comp)" class="component-button"
+                [title]="comp.name">
+                {{ comp.name }}
+            </button>
+        </div>
+        <div class="component-group">
+            <span class="group-label">Layout:</span>
+            <button *ngFor="let comp of layoutComponents" (click)="insertComponent(comp)" class="component-button"
+                [title]="comp.name">
+                {{ comp.name }}
+            </button>
+        </div>
+        <div class="component-group">
+            <span class="group-label">Data:</span>
+            <button *ngFor="let comp of dataComponents" (click)="insertComponent(comp)" class="component-button"
+                [title]="comp.name">
+                {{ comp.name }}
+            </button>
+        </div>
+    </div>
+<!--<div class="data-source">
+    <select [(ngModel)]="dataSource" class="source-select">
+        <option value="file">JSON File</option>
+        <option value="api">API</option>
+    </select>
+
+    <div *ngIf="dataSource === 'api'" class="api-input">
+        <input type="text" [(ngModel)]="apiUrl" placeholder="Enter API URL" class="url-input">
+        <button (click)="fetchApiData()" [disabled]="!apiUrl" class="tool-button">
+            Fetch Data
+        </button>
     </div>
 
-    <div *ngIf="error" class="error-message">
-      {{ error }}
+    <div *ngIf="dataSource === 'file'" class="file-actions">
+        <button (click)="loadSampleData()" class="tool-button">
+            Load Sample Data
+        </button>
+        <button (click)="formatJson('data')" [disabled]="!data" class="tool-button">
+            Format Data
+        </button>
+        <button (click)="clearEditor('data')" [disabled]="!data" class="tool-button">
+            Clear Data
+        </button>
     </div>
-
-    <div class="main-content">
-      <div class="editors">
-        <!-- Template Editor -->
+</div>
+-->
+<div class="main-content">
+    <div class="editors">
         <div class="editor-section">
-          <h2>Template</h2>
-          <textarea
-            [(ngModel)]="template"
-            (ngModelChange)="onTemplateChange($event)"
-            placeholder="Enter template JSON..."
-          ></textarea>
+            <div class="editor-header">
+                <h2>Template</h2>
+                        <!--
+                <div class="template-help">
+                    <button (click)="showHelp = !showHelp" class="help-button">
+                        {{ showHelp ? 'Hide Help' : 'Show Help' }}
+                    </button>
+                </div>
+            </div>
+            <div *ngIf="showHelp" class="help-panel">
+                <h3>Template Structure Help</h3>
+                <pre>{{templateHelpText}}</pre>
+        -->
+            </div>
+            <div class="editor-wrapper">
+                <textarea [(ngModel)]="template" (ngModelChange)="onTemplateChange($event)"
+                    placeholder="Enter template JSON..." [class.error]="templateError" class="json-editor"></textarea>
+                <div *ngIf="templateError" class="error-panel">
+                    <div class="error-message">{{ templateError.message }}</div>
+                    <div *ngIf="templateError.line" class="error-location">
+                        Line: {{ templateError.line }}
+                    </div>
+                </div>
+            </div>
         </div>
-
-        <!-- Data Editor -->
         <div *ngIf="dataSource === 'file'" class="editor-section">
-          <h2>Data</h2>
-          <textarea
-            [(ngModel)]="data"
-            (ngModelChange)="onDataChange($event)"
-            placeholder="Enter data JSON..."
-          ></textarea>
+            <div class="editor-header">
+                <h2>Data</h2>
+            </div>
+            <div class="editor-wrapper">
+                <textarea [(ngModel)]="data" (ngModelChange)="onDataChange($event)" placeholder="Enter data JSON..."
+                    [class.error]="dataError" class="json-editor"></textarea>
+                <div *ngIf="dataError" class="error-panel">
+                    <div class="error-message">{{ dataError.message }}</div>
+                    <div *ngIf="dataError.line" class="error-location">
+                        Line: {{ dataError.line }}
+                    </div>
+                </div>
+            </div>
         </div>
-      </div>
+    </div>
+    <div class="preview-section">
+        <div class="preview-header">
+            <h2>PDF Preview</h2>
+            <div class="preview-controls">
+                <button (click)="updatePreview()" [disabled]="!canPreview" class="preview-button">
+                    Refresh Preview
+                </button>
+                <button (click)="downloadPdf()" [disabled]="!previewUrl" class="download-button">
+                    Download PDF
+                </button>
+            </div>
+        </div>
 
-      <!-- PDF Preview -->
-      <div class="preview-section">
-        <h2>PDF Preview</h2>
         <div class="preview-container">
-          <iframe 
-            *ngIf="previewUrl"
-            [src]="previewUrl" 
-            frameborder="0"
-            class="pdf-preview"
-          ></iframe>
-          <div *ngIf="!previewUrl" class="preview-placeholder">
-            Enter valid template and data to see PDF preview
-          </div>
+            <iframe *ngIf="previewUrl" [src]="previewUrl" frameborder="0" class="pdf-preview"></iframe>
+            <div *ngIf="!previewUrl" class="preview-placeholder">
+                Enter valid template and data to see PDF preview
+            </div>
+            <div *ngIf="isLoading" class="loading-overlay">
+                Generating PDF...
+            </div>
         </div>
-      </div>
     </div>
-
-    <div class="actions">
-      <button 
-        (click)="updatePreview()"
-        [disabled]="!canPreview"
-      >
-        Refresh Preview
-      </button>
-      <button 
-        (click)="downloadPdf()"
-        [disabled]="!previewUrl"
-      >
-        Download PDF
-      </button>
-    </div>
-  </div>
+</div>
+</div>
