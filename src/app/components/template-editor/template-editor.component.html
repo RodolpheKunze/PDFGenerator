@@ -22,6 +22,36 @@
             </button>
         </div>
     </div>
+    <div class="styles-toolbar">
+        <div class="component-group">
+            <span class="group-label">Alignment:</span>
+            <button *ngFor="let style of styleComponents | filterByGroup:'alignment'" 
+                    (click)="insertStyle(style)" 
+                    class="style-button"
+                    [title]="style.name">
+                <lucide-icon [name]="style.icon"></lucide-icon>
+            </button>
+        </div>
+        <div class="component-group">
+            <span class="group-label">Text:</span>
+            <button *ngFor="let style of styleComponents | filterByGroup:'text'" 
+                    (click)="insertStyle(style)" 
+                    class="style-button"
+                    [title]="style.name">
+                <lucide-icon [name]="style.icon"></lucide-icon>
+            </button>
+        </div>
+        <div class="component-group">
+            <span class="group-label">Headings:</span>
+            <button *ngFor="let style of styleComponents | filterByGroup:'heading'" 
+                    (click)="insertStyle(style)" 
+                    class="style-button"
+                    [title]="style.name">
+                <lucide-icon [name]="style.icon"></lucide-icon>
+            </button>
+        </div>
+    </div>
+    
 <!--<div class="data-source">
     <select [(ngModel)]="dataSource" class="source-select">
         <option value="file">JSON File</option>
@@ -53,6 +83,11 @@
         <div class="editor-section">
             <div class="editor-header">
                 <h2>Template</h2>
+                <button (click)="clearEditor('template')" 
+                class="clear-button" 
+                [disabled]="!template">
+            Clear Template
+            </button>
                         <!--
                 <div class="template-help">
                     <button (click)="showHelp = !showHelp" class="help-button">

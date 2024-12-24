@@ -1,10 +1,14 @@
 // template-editor.component.ts
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, NgModule, OnInit, ViewChild } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import { LucideAngularModule } from 'lucide-angular';
 
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { PdfGeneratorService } from '../../service/pdf-generator.service';
+import { FilterByGroupPipe } from '../../pipe/FilterByGroupPipe';
+import { PdfStyle, STYLE_COMPONENTS } from '../../interface/pdf-style.interface';
+
 
 interface ValidationError {
   message: string;
@@ -21,10 +25,14 @@ interface PdfComponent {
 @Component({
   selector: 'app-template-editor',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, FilterByGroupPipe,
+    LucideAngularModule
+  ],
   templateUrl: './template-editor.component.html',
   styleUrl: './template-editor.component.css'
 })
+
+
 export class TemplateEditorComponent implements OnInit {
   @ViewChild('templateEditor') templateEditor!: ElementRef;
   template = '';
@@ -63,6 +71,7 @@ export class TemplateEditorComponent implements OnInit {
     }
   }
 }`;
+styleComponents = STYLE_COMPONENTS;
 
 
 
@@ -249,6 +258,36 @@ export class TemplateEditorComponent implements OnInit {
       this.dataError = null;
     }
   }
+
+  insertStyle(style: PdfStyle) {
+    try {
+      let currentTemplate = this.template;
+      
+      if (!currentTemplate.trim()) {
+        currentTemplate = `{
+    "content": [],
+    "styles": {}
+  }`;
+      }
+      const templateObj = JSON.parse(currentTemplate);
+    
+      // Ensure styles object exists
+      if (!templateObj.styles) {
+        templateObj.styles = {};
+      }
+  
+      // Add style with a unique name
+      const styleName = style.name.toLowerCase().replace(/\s+/g, '_');
+      templateObj.styles[styleName] = JSON.parse(style.style);
+  
+      this.template = JSON.stringify(templateObj, null, 2);
+      this.onTemplateChange(this.template);
+  
+    } catch (e) {
+      console.error('Error inserting style:', e);
+    }
+  }
+
   async fetchApiData() {
     try {
       this.isLoading = true;
