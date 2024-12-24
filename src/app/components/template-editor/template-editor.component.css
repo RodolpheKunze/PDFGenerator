@@ -32,6 +32,13 @@
     align-items: right;
     display: flex;
     gap: 0.5rem;
+    padding: 0.5rem;
+  }
+  .clear-data {
+    align-items: right;
+    display: flex;
+    gap: 0.5rem;
+    padding: 0.5rem;
   }
 
   textarea {
@@ -214,6 +221,7 @@ text-align: center;
   .preview-controls {
     display: flex;
     gap: 0.5rem;
+    padding: 0.5rem;
   }
 
   .preview-button {

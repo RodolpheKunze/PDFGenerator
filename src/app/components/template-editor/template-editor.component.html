@@ -114,6 +114,11 @@
             <div *ngIf="dataSource === 'file'" class="editor-section">
                 <div class="editor-header">
                     <h2>Data</h2>
+                    <div class="clear-data">
+                        <button (click)="clearEditor('data')" class="clear-button" [disabled]="!data">
+                            Clear Data
+                        </button>
+                    </div>
                 </div>
                 <div class="editor-wrapper">
                     <textarea [(ngModel)]="data" (ngModelChange)="onDataChange($event)" placeholder="Enter data JSON..."
