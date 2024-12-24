@@ -108,7 +108,9 @@ export class TemplateEditorComponent implements OnInit {
     }
   }
 
-  ngOnInit() {}
+  ngOnInit() {
+    this.data="{}"
+  }
 
   get canPreview(): boolean {
     return Boolean(
