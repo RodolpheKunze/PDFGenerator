@@ -1,5 +1,11 @@
 // template-editor.component.ts
-import { Component, ElementRef, NgModule, OnInit, ViewChild } from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  NgModule,
+  OnInit,
+  ViewChild,
+} from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { LucideAngularModule } from 'lucide-angular';
@@ -7,8 +13,16 @@ import { LucideAngularModule } from 'lucide-angular';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { PdfGeneratorService } from '../../service/pdf-generator.service';
 import { FilterByGroupPipe } from '../../pipe/FilterByGroupPipe';
-import { PdfStyle, STYLE_COMPONENTS } from '../../interface/pdf-style.interface';
-
+import {
+  PdfStyle,
+  STYLE_COMPONENTS,
+} from '../../interface/pdf-style.interface';
+import {
+  PdfComponent,
+  BASIC_COMPONENTS,
+  DATA_COMPONENTS,
+  LAYOUT_COMPONENTS,
+} from '../../interface/pdf-component.interface';
 
 interface ValidationError {
   message: string;
@@ -16,23 +30,13 @@ interface ValidationError {
   line?: number;
 }
 
-interface PdfComponent {
-  name: string;
-  icon?: string;
-  template: string;
-}
-
 @Component({
   selector: 'app-template-editor',
   standalone: true,
-  imports: [CommonModule, FormsModule, FilterByGroupPipe,
-    LucideAngularModule
-  ],
+  imports: [CommonModule, FormsModule, FilterByGroupPipe, LucideAngularModule],
   templateUrl: './template-editor.component.html',
-  styleUrl: './template-editor.component.css'
+  styleUrl: './template-editor.component.css',
 })
-
-
 export class TemplateEditorComponent implements OnInit {
   @ViewChild('templateEditor') templateEditor!: ElementRef;
   template = '';
@@ -71,166 +75,47 @@ export class TemplateEditorComponent implements OnInit {
     }
   }
 }`;
-styleComponents = STYLE_COMPONENTS;
-
-
+  styleComponents = STYLE_COMPONENTS;
+  basicComponents = BASIC_COMPONENTS;
+  layoutComponents = LAYOUT_COMPONENTS;
+  dataComponents = DATA_COMPONENTS;
 
   constructor(
     private pdfGenerator: PdfGeneratorService,
     private sanitizer: DomSanitizer
   ) {}
 
-
-  basicComponents: PdfComponent[] = [
-    {
-      name: 'Text',
-      template: `{
-  "text": "Your text here",
-  "style": "normal"
-}`
-    },
-    {
-      name: 'Header',
-      template: `{
-  "text": "Header text",
-  "style": "header"
-}`
-    },
-    {
-      name: 'Image',
-      template: `{
-  "image": "{{imageName}}",
-  "width": 150
-}`
-    }
-  ];
-
-  layoutComponents: PdfComponent[] = [
-    {
-      name: 'Columns',
-      template: `{
-  "columns": [
-    {
-      "width": "*",
-      "text": "Column 1"
-    },
-    {
-      "width": "*",
-      "text": "Column 2"
-    }
-  ]
-}`
-    },
-    {
-      name: 'Stack',
-      template: `{
-  "stack": [
-    "First line",
-    "Second line",
-    "Third line"
-  ]
-}`
-    },
-    {
-      name: 'Table',
-      template: `{
-  "table": {
-    "headerRows": 1,
-    "widths": ["*", "auto", "auto"],
-    "body": [
-      ["Header 1", "Header 2", "Header 3"],
-      ["Cell 1", "Cell 2", "Cell 3"]
-    ]
-  }
-}`
-    }
-  ];
-
-  dataComponents: PdfComponent[] = [
-    {
-      name: 'Data Field',
-      template: `"{{fieldName}}"`
-    },
-    {
-      name: 'Data Loop',
-      template: `{
-  "ul": [
-    "{{#each items}}",
-    "{{name}}",
-    "{{/each}}"
-  ]
-}`
-    }
-  ];
-
   insertComponent(component: PdfComponent) {
     try {
       let currentTemplate = this.template;
-      
+
       if (!currentTemplate.trim()) {
         currentTemplate = `{
   "content": [
-  ],
-  "styles": {
-    "header": {
-      "fontSize": 18,
-      "bold": true,
-      "margin": [0, 0, 0, 10]
-    },
-    "normal": {
-      "fontSize": 12,
-      "margin": [0, 5, 0, 5]
-    }
-  }
+  ]
 }`;
       }
-
       const templateObj = JSON.parse(currentTemplate);
-
       if (!templateObj.content) {
         templateObj.content = [];
       }
-
       const newComponent = JSON.parse(component.template);
       templateObj.content.push(newComponent);
-
       this.template = JSON.stringify(templateObj, null, 2);
       this.onTemplateChange(this.template);
-
     } catch (e) {
       console.error('Error inserting component:', e);
     }
   }
 
-
   ngOnInit() {}
 
   get canPreview(): boolean {
-    return Boolean(this.template && 
-      ((this.dataSource === 'file' && this.data) || 
-       (this.dataSource === 'api' && this.apiUrl)));
-  }
-
-  loadSampleTemplate() {
-    this.template = this.templateHelpText;
-    this.onTemplateChange(this.template);
-  }
-
-  loadSampleData() {
-    this.data = `{
-  "title": "Sample Document",
-  "items": [
-    {
-      "name": "Item 1",
-      "price": 100
-    },
-    {
-      "name": "Item 2",
-      "price": 200
-    }
-  ]
-}`;
-    this.onDataChange(this.data);
+    return Boolean(
+      this.template /*&&
+        ((this.dataSource === 'file' && this.data) ||
+          (this.dataSource === 'api' && this.apiUrl))*/
+    );
   }
 
   formatJson(type: 'template' | 'data') {
@@ -262,7 +147,7 @@ styleComponents = STYLE_COMPONENTS;
   insertStyle(style: PdfStyle) {
     try {
       let currentTemplate = this.template;
-      
+
       if (!currentTemplate.trim()) {
         currentTemplate = `{
     "content": [],
@@ -270,19 +155,18 @@ styleComponents = STYLE_COMPONENTS;
   }`;
       }
       const templateObj = JSON.parse(currentTemplate);
-    
+
       // Ensure styles object exists
       if (!templateObj.styles) {
         templateObj.styles = {};
       }
-  
+
       // Add style with a unique name
       const styleName = style.name.toLowerCase().replace(/\s+/g, '_');
       templateObj.styles[styleName] = JSON.parse(style.style);
-  
+
       this.template = JSON.stringify(templateObj, null, 2);
       this.onTemplateChange(this.template);
-  
     } catch (e) {
       console.error('Error inserting style:', e);
     }
@@ -306,8 +190,10 @@ styleComponents = STYLE_COMPONENTS;
 
   async onTemplateChange(value: string) {
     try {
+      console.log("onTemplateChange with value:", value)
       if (value) {
         JSON.parse(value);
+        console.log("json parsed:", JSON.parse(value))
       }
       this.error = '';
       await this.updatePreview();
@@ -330,20 +216,19 @@ styleComponents = STYLE_COMPONENTS;
 
   async updatePreview() {
     try {
+      console.log("in updatePreview with this.canPreview:", this.canPreview)
       if (!this.canPreview) return;
 
       let parsedTemplate = JSON.parse(this.template);
       let parsedData;
-
-      if (this.dataSource === 'file') {
         parsedData = JSON.parse(this.data);
-      } else {
-        const response = await fetch(this.apiUrl);
-        parsedData = await response.json();
-      }
+        console.log("parsedTemplate:", parsedTemplate, " parsedData:", parsedData)
 
-      const pdfDoc = await this.pdfGenerator.generatePdf(parsedTemplate, parsedData);
-      
+      const pdfDoc = await this.pdfGenerator.generatePdf(
+        parsedTemplate,
+        parsedData
+      );
+
       pdfDoc.getBlob((blob: Blob) => {
         const url = URL.createObjectURL(blob);
         this.previewUrl = this.sanitizer.bypassSecurityTrustResourceUrl(url);
@@ -358,7 +243,9 @@ styleComponents = STYLE_COMPONENTS;
   downloadPdf() {
     if (this.previewUrl) {
       const link = document.createElement('a');
-      link.href = (this.previewUrl as any).changingThisBreaksApplicationSecurity;
+      link.href = (
+        this.previewUrl as any
+      ).changingThisBreaksApplicationSecurity;
       link.download = 'document.pdf';
       link.click();
     }

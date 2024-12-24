@@ -1,58 +1,57 @@
 <div class="editor-container">
+    <div class="components-toolbar-menu">
+        <div class="toolbar-menu"><span class="group-label">Basic</span></div>
+        <div class="toolbar-menu"><span class="group-label">Layout</span></div>
+        <div class="toolbar-menu"><span class="group-label">Data</span></div>
+    </div>
     <div class="components-toolbar">
         <div class="component-group">
-            <span class="group-label">Basic:</span>
             <button *ngFor="let comp of basicComponents" (click)="insertComponent(comp)" class="component-button"
                 [title]="comp.name">
                 {{ comp.name }}
             </button>
         </div>
         <div class="component-group">
-            <span class="group-label">Layout:</span>
             <button *ngFor="let comp of layoutComponents" (click)="insertComponent(comp)" class="component-button"
                 [title]="comp.name">
                 {{ comp.name }}
             </button>
         </div>
         <div class="component-group">
-            <span class="group-label">Data:</span>
+
             <button *ngFor="let comp of dataComponents" (click)="insertComponent(comp)" class="component-button"
                 [title]="comp.name">
                 {{ comp.name }}
             </button>
         </div>
     </div>
+    <div class="components-toolbar-menu">
+        <div class="toolbar-menu"><span class="group-label">Alignment</span></div>
+        <div class="toolbar-menu"><span class="group-label">Text</span></div>
+        <div class="toolbar-menu"><span class="group-label">Headings</span></div>
+    </div>
     <div class="styles-toolbar">
         <div class="component-group">
-            <span class="group-label">Alignment:</span>
-            <button *ngFor="let style of styleComponents | filterByGroup:'alignment'" 
-                    (click)="insertStyle(style)" 
-                    class="style-button"
-                    [title]="style.name">
+            <button *ngFor="let style of styleComponents | filterByGroup:'alignment'" (click)="insertStyle(style)"
+                class="style-button" [title]="style.name">
                 <lucide-icon [name]="style.icon"></lucide-icon>
             </button>
         </div>
         <div class="component-group">
-            <span class="group-label">Text:</span>
-            <button *ngFor="let style of styleComponents | filterByGroup:'text'" 
-                    (click)="insertStyle(style)" 
-                    class="style-button"
-                    [title]="style.name">
+            <button *ngFor="let style of styleComponents | filterByGroup:'text'" (click)="insertStyle(style)"
+                class="style-button" [title]="style.name">
                 <lucide-icon [name]="style.icon"></lucide-icon>
             </button>
         </div>
         <div class="component-group">
-            <span class="group-label">Headings:</span>
-            <button *ngFor="let style of styleComponents | filterByGroup:'heading'" 
-                    (click)="insertStyle(style)" 
-                    class="style-button"
-                    [title]="style.name">
+            <button *ngFor="let style of styleComponents | filterByGroup:'heading'" (click)="insertStyle(style)"
+                class="style-button" [title]="style.name">
                 <lucide-icon [name]="style.icon"></lucide-icon>
             </button>
         </div>
     </div>
-    
-<!--<div class="data-source">
+
+    <!--<div class="data-source">
     <select [(ngModel)]="dataSource" class="source-select">
         <option value="file">JSON File</option>
         <option value="api">API</option>
@@ -78,17 +77,17 @@
     </div>
 </div>
 -->
-<div class="main-content">
-    <div class="editors">
-        <div class="editor-section">
-            <div class="editor-header">
-                <h2>Template</h2>
-                <button (click)="clearEditor('template')" 
-                class="clear-button" 
-                [disabled]="!template">
-            Clear Template
-            </button>
-                        <!--
+    <div class="main-content">
+        <div class="editors">
+            <div class="editor-section">
+                <div class="editor-header">
+                    <h2>Template</h2>
+                    <div class="clear-template">
+                        <button (click)="clearEditor('template')" class="clear-button" [disabled]="!template">
+                            Clear Template
+                        </button>
+                    </div>
+                    <!--
                 <div class="template-help">
                     <button (click)="showHelp = !showHelp" class="help-button">
                         {{ showHelp ? 'Hide Help' : 'Show Help' }}
@@ -99,56 +98,57 @@
                 <h3>Template Structure Help</h3>
                 <pre>{{templateHelpText}}</pre>
         -->
+                </div>
+                <div class="editor-wrapper">
+                    <textarea [(ngModel)]="template" (ngModelChange)="onTemplateChange($event)"
+                        placeholder="Enter template JSON..." [class.error]="templateError"
+                        class="json-editor"></textarea>
+                    <div *ngIf="templateError" class="error-panel">
+                        <div class="error-message">{{ templateError.message }}</div>
+                        <div *ngIf="templateError.line" class="error-location">
+                            Line: {{ templateError.line }}
+                        </div>
+                    </div>
+                </div>
             </div>
-            <div class="editor-wrapper">
-                <textarea [(ngModel)]="template" (ngModelChange)="onTemplateChange($event)"
-                    placeholder="Enter template JSON..." [class.error]="templateError" class="json-editor"></textarea>
-                <div *ngIf="templateError" class="error-panel">
-                    <div class="error-message">{{ templateError.message }}</div>
-                    <div *ngIf="templateError.line" class="error-location">
-                        Line: {{ templateError.line }}
+            <div *ngIf="dataSource === 'file'" class="editor-section">
+                <div class="editor-header">
+                    <h2>Data</h2>
+                </div>
+                <div class="editor-wrapper">
+                    <textarea [(ngModel)]="data" (ngModelChange)="onDataChange($event)" placeholder="Enter data JSON..."
+                        [class.error]="dataError" class="json-editor"></textarea>
+                    <div *ngIf="dataError" class="error-panel">
+                        <div class="error-message">{{ dataError.message }}</div>
+                        <div *ngIf="dataError.line" class="error-location">
+                            Line: {{ dataError.line }}
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-        <div *ngIf="dataSource === 'file'" class="editor-section">
-            <div class="editor-header">
-                <h2>Data</h2>
-            </div>
-            <div class="editor-wrapper">
-                <textarea [(ngModel)]="data" (ngModelChange)="onDataChange($event)" placeholder="Enter data JSON..."
-                    [class.error]="dataError" class="json-editor"></textarea>
-                <div *ngIf="dataError" class="error-panel">
-                    <div class="error-message">{{ dataError.message }}</div>
-                    <div *ngIf="dataError.line" class="error-location">
-                        Line: {{ dataError.line }}
-                    </div>
+        <div class="preview-section">
+            <div class="preview-header">
+                <h2>PDF Preview</h2>
+                <div class="preview-controls">
+                    <button (click)="updatePreview()" [disabled]="!canPreview" class="preview-button">
+                        Refresh Preview
+                    </button>
+                    <button (click)="downloadPdf()" [disabled]="!previewUrl" class="download-button">
+                        Download PDF
+                    </button>
                 </div>
             </div>
-        </div>
-    </div>
-    <div class="preview-section">
-        <div class="preview-header">
-            <h2>PDF Preview</h2>
-            <div class="preview-controls">
-                <button (click)="updatePreview()" [disabled]="!canPreview" class="preview-button">
-                    Refresh Preview
-                </button>
-                <button (click)="downloadPdf()" [disabled]="!previewUrl" class="download-button">
-                    Download PDF
-                </button>
-            </div>
-        </div>
 
-        <div class="preview-container">
-            <iframe *ngIf="previewUrl" [src]="previewUrl" frameborder="0" class="pdf-preview"></iframe>
-            <div *ngIf="!previewUrl" class="preview-placeholder">
-                Enter valid template and data to see PDF preview
-            </div>
-            <div *ngIf="isLoading" class="loading-overlay">
-                Generating PDF...
+            <div class="preview-container">
+                <iframe *ngIf="previewUrl" [src]="previewUrl" frameborder="0" class="pdf-preview"></iframe>
+                <div *ngIf="!previewUrl" class="preview-placeholder">
+                    Enter valid template and data to see PDF preview
+                </div>
+                <div *ngIf="isLoading" class="loading-overlay">
+                    Generating PDF...
+                </div>
             </div>
         </div>
     </div>
-</div>
 </div>
