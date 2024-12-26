@@ -10,7 +10,7 @@ import { ImageService } from './image.service';
   providedIn: 'root'
 })
 export class PdfGeneratorService {
-  constructor(private imageService: ImageService) {}
+  constructor(private imageService: ImageService) { }
 
   async generatePdf(template: any, data: any) {
     const processedTemplate = await this.processTemplate(template, data);
@@ -20,16 +20,16 @@ export class PdfGeneratorService {
   private async processTemplate(template: any, data: any): Promise<any> {
     // Deep clone the template to avoid modifying the original
     const processedTemplate = JSON.parse(JSON.stringify(template));
-    
+
     // Process image in content
     await this.processContentImages(processedTemplate.content, data);
-    
+
     // Process all content
     this.processNode(processedTemplate, data);
-    
+
     // Handle table data separately
     this.processTableData(processedTemplate, data);
-    
+
     return processedTemplate;
   }
 
@@ -54,7 +54,7 @@ export class PdfGeneratorService {
     if (typeof node === 'string') {
       return this.replacePlaceholders(node, data);
     }
-    
+
     if (Array.isArray(node)) {
       node.forEach((item, index) => {
         if (typeof item === 'string') {
@@ -65,7 +65,7 @@ export class PdfGeneratorService {
       });
       return;
     }
-    
+
     if (typeof node === 'object' && node !== null) {
       Object.keys(node).forEach(key => {
         if (key !== 'image' && typeof node[key] === 'string') {

@@ -14,7 +14,7 @@ export class ImageService {
     }
 
     const imagePath = `assets/images/${imageName}`;
-    
+
     try {
       const img = new Image();
       const canvas = document.createElement('canvas');

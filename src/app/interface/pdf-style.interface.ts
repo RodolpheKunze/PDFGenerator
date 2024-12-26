@@ -5,6 +5,25 @@ export interface PdfStyle {
     group: 'heading' | 'text' | 'alignment';
   }
 
+  export interface FontSize {
+    label: string;
+    value: number;
+  }
+  
+  export const FONT_SIZES: FontSize[] = [
+    { label: '8', value: 8 },
+    { label: '10', value: 10 },
+    { label: '12', value: 12 },
+    { label: '14', value: 14 },
+    { label: '16', value: 16 },
+    { label: '18', value: 18 },
+    { label: '20', value: 20 },
+    { label: '24', value: 24 },
+    { label: '28', value: 28 },
+    { label: '32', value: 32 }
+  ];
+  
+
   export const STYLE_COMPONENTS: PdfStyle []= [
     // Headings
     {
@@ -34,7 +53,7 @@ export interface PdfStyle {
         "fontSize": 12,
         "margin": [0, 5, 0, 5]
       }`,
-      icon: 'text',
+      icon: 'type',
       group: 'text'
     },
     {
@@ -79,4 +98,3 @@ export interface PdfStyle {
       group: 'alignment'
     }
   ];
-  

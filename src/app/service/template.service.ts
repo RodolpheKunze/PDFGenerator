@@ -4,19 +4,19 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
 @Injectable({
-  providedIn: 'root'
+    providedIn: 'root'
 })
 export class TemplateService {
-  constructor(private http: HttpClient) {}
+    constructor(private http: HttpClient) { }
 
-  async getTemplate(templateName: string): Promise<any> {
-    // Dynamic import of the JSON file
-    const template = await import(`../../assets/templates/${templateName}.json`);
-    return template.default;
-  }
+    async getTemplate(templateName: string): Promise<any> {
+        // Dynamic import of the JSON file
+        const template = await import(`../../assets/templates/${templateName}.json`);
+        return template.default;
+    }
 
-  // API version
-  getTemplateFromApi(templateId: string): Observable<any> {
-    return this.http.get(`/api/templates/${templateId}`);
-  }
+    // API version
+    getTemplateFromApi(templateId: string): Observable<any> {
+        return this.http.get(`/api/templates/${templateId}`);
+    }
 }

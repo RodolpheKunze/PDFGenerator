@@ -50,7 +50,16 @@
             </button>
         </div>
     </div>
-
+    <div class="font-size"> 
+        <span class="group-label">Font Size:</span>
+        <select [(ngModel)]="selectedFontSize" 
+                class="font-size-select">
+            <option *ngFor="let size of fontSizes" 
+                    [value]="size.value">
+                {{ size.label }}
+            </option>
+        </select>
+    </div>
     <!--<div class="data-source">
     <select [(ngModel)]="dataSource" class="source-select">
         <option value="file">JSON File</option>

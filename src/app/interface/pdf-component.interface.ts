@@ -8,15 +8,13 @@ export const BASIC_COMPONENTS: PdfComponent[] = [
     {
         name: 'Text',
         template: `{
-  "text": "Your text here",
-  "style": "normal"
+  "text": "Your text here"
 }`
     },
     {
         name: 'Header',
         template: `{
   "text": "Header text",
-  "style": "header"
 }`
     },
     {

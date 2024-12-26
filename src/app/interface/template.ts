@@ -1,3 +1,4 @@
+import { FontSize } from "./pdf-style.interface";
 
 export interface PDFTemplate {
   content: Content[];
@@ -6,7 +7,7 @@ export interface PDFTemplate {
 }
 
 export interface Style {
-  fontSize?: number;
+  fontSize?: FontSize;
   bold?: boolean;
   margin?: number[];
   alignment?: 'left' | 'right' | 'center' | 'justify';
